@@ -1,0 +1,19 @@
+* {
+    background-color: #232222;
+    color: white;
+    font-family: CircularSpTitle,CircularSpTitle-Tall,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif);
+    text-align: center;
+}
+
+*::selection {
+    background-color: rgba(101, 101, 101, 0.299);
+}
+
+p,span {
+    color: rgba(255, 255, 255, 0.329);
+}
+
+img {
+    width: 10%;
+    width: 20%;
+}

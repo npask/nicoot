@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../data/style/style.css">
+		<title>N Musik x Therapy</title>
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<script src="https://kit.fontawesome.com/04b3ed5844.js" crossorigin="anonymous"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+		
+		<!-- ================= Login Sy ================= -->
+		<script type="text/javascript" src="https://www.authpro.com/auth/N_Musik/?action=pp"></script>
+
+		<!-- ================= Favicon ================== -->
+        <!-- Standard -->
+        <link rel="icon" type="img/png" href="cover.png" /> 
+	</head>
+	<body class="background" onload="load()">
+		<div class="frame">
+			<!--Cover-->
+			<img src="cover.png" style="max-width: 200px; max-height: 200px;border-radius: 12px;"></img><br>
+			<!--Titel-->
+			<a id="title">Titel: Therapy</a><br>
+			<!--Von-->
+			<a> von: Crono </a><br>
+			<!--bar-->
+			<progress class="Play" id="pro"></progress>
+			<!--Controls-->
+			<div class="control">
+				<button class="button" onclick="document.getElementById('a').currentTime -= 10">10 <i class="fa-solid fa-angles-left"></i></button>
+				<a> | </a>
+				<button onclick="psaudio()" id="ppb" class="button"><i class="fa-regular fa-circle-play fa-lg" style="color: #00ff00;"></i></button>
+				<a> | </a>
+				<button class="button" onclick="document.getElementById('a').currentTime += 10"><i class="fa-solid fa-angles-right"></i> 10</button>
+			<!--Scripts-->
+				<script>
+					var start = '<i class="fa-regular fa-circle-play fa-beat fa-lg" style="color: #00ff00;"></i>'
+					var puase = '<i class="fa-regular fa-circle-pause fa-lg" style="color: #ff0000;"></i>'
+
+					function psaudio() {if (document.getElementById("a").paused) {document.getElementById("a").play();} else {document.getElementById("a").pause()}}
+
+					function relpro(event) {document.getElementById("pro").value = event.currentTime;
+											document.getElementById("pro").max = event.duration;}
+					function muend(event) {event.currentTime = 0;event.play()}
+
+					document.addEventListener('keydown', (e) => {
+ 					   if (e.code === "Space") {
+						psaudio();
+ 					   }
+					});
+			function load() {
+			deleteElements()
+			}
+			function deleteElements() {
+			var elements = document.getElementsByTagName('body')[0].children;
+			for (var i = elements.length - 1; i >= 0; i--) {
+				if (elements[i].tagName !== 'SCRIPT') {
+					if (elements[i].tagName !== 'HEADER') {
+						if (elements[i].tagName !== 'META') {
+							if (elements[i].tagName !== 'STYLE') {
+								if (elements[i].tagName !== 'LINK') {
+									if (elements[i].tagName !== 'TITLE') {
+										 if (elements[i].tagName !== 'A') {
+											if (elements[i].tagName !== 'STYLE') {
+												if (elements[i].tagName !== 'SECTION') {
+													if (elements[i].tagName !== 'DIV') {
+														if (elements[i].tagName !== 'FOOTER') {
+                             								 if (elements[i].tagName !== 'NAV') {
+                              									  if (elements[i].tagName !== 'UL') {
+                               										   if (elements[i].tagName !== 'AUDIO') {
+															    		  elements[i].parentNode.removeChild(elements[i]);
+														     			}
+														   			}
+															    }
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+				</script>
+			</div>
+		</div>
+	<audio class="audio" id="a" ontimeupdate="relpro(this)" onended="muend(this)" onpause="document.getElementById('ppb').innerHTML = start;" onplay="document.getElementById('ppb').innerHTML = puase;">
+		<source src="sound.mp3" type="audio/mpeg">
+ 		 Your browser does not support the audio element.
+	</audio>
+</body>
+</html>
