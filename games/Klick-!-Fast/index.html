@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klick ! Fast</title>
+    <style>
+        body{
+            background-color: #333;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        hr{
+            width: 50%;
+            border: solid 1px white;
+            border-radius: 20px;
+        }
+
+        button{
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background-color: white;
+            color: black;
+            transition: all 0.2s;
+        }
+
+        button:hover{
+            background-color: grey;
+        }
+    </style>
+</head>
+<body>
+    <h1>Klick ! Fast</h1>
+    <hr>
+    <a>The new Game</a>
+    <button onclick="startGame()" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);background-color: lime;">Start Game</button>
+    <button onclick="howToPlay()" style="position: absolute;bottom: 25%;left: 50%;transform: translate(-50%,-25%);background-color: orange;">How to play?</button>
+    <script>
+        let time = 0
+        let finishTime = 0;
+        let finished = false;
+
+        function howToPlay(){
+            let element = document.createElement('div')
+            element.style.position = "absolute"
+            element.style.top = "0px"
+            element.style.left = "0px"
+            element.style.width = "100%"
+            element.style.height = "100%"
+            element.style.backgroundColor = "black"
+            element.id = "HowToPlay"
+            element.innerHTML = "<h1>How to play?</h1><hr><p>It's really easy click as fastes you can the button, <br> the button is ever in a new position and how can click as fastes wins, <br> and there is a leaderboard.</p><button onclick='closeHowToPlay()' style='background-color:red'>Close</button>"
+            document.body.appendChild(element)
+        }
+
+        function closeHowToPlay() {
+            if(document.getElementById('HowToPlay')){
+                document.getElementById('HowToPlay').remove()
+            }
+        }
+
+        function startGame(){
+            let element = document.createElement('div')
+            element.style.position = "absolute"
+            element.style.top = "0px"
+            element.style.left = "0px"
+            element.style.width = "100%"
+            element.style.height = "100%"
+            element.style.backgroundColor = "black"
+            element.id = "Play"
+            element.innerHTML = "<button style='display:none;position:absolute;transform:translate(-50%,-50%)' id='randomButton' onclick='clickedButton()'>CLICK!</button>"
+            document.body.appendChild(element)
+
+            finished = false
+            finishTime = 0
+            time = 0
+
+            setTimeout(() => {
+
+                var button = document.getElementById('randomButton');
+
+                var screenWidth = window.innerWidth;
+                var screenHeight = window.innerHeight;
+
+                var randomX = Math.floor(Math.random() * screenWidth);
+                var randomY = Math.floor(Math.random() * screenHeight);
+
+                button.style.left = randomX + 'px';
+                button.style.top = randomY + 'px';
+                button.style.display = ""
+
+                for (let i = 0; i < 5000; i++) {
+                    setTimeout(() => {
+                        if(!finished){
+                            time++
+                        }
+                    }, 1*i);
+                }
+            }, 1000);
+        }
+
+        function clickedButton(){
+            finishTime = time
+            finished = true
+            if(document.getElementById('Play')){
+                document.getElementById('Play').remove()
+                let element = document.createElement('div')
+                element.style.position = "absolute"
+                element.style.top = "0px"
+                element.style.left = "0px"
+                element.style.width = "100%"
+                element.style.height = "100%"
+                element.style.backgroundColor = "black"
+                element.id = "Finished"
+                element.innerHTML = "<h1 style='color:lime'>You Won</h1><hr><p>Youre Reaction time is " + finishTime + "ms<br>Congrats!<br><br>Auto Close in 5s</p>"
+                document.body.appendChild(element)
+                setTimeout(() => {
+                    if(document.getElementById('Finished')){
+                        document.getElementById('Finished').remove()
+                    }
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
