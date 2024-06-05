@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Key</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body{
+            background-color: black;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+        }
+
+        div{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: max-width;
+        }
+
+        a{
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        p{
+            color: grey;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        div *:not(a){
+            width: 100%;
+            margin-left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <i class="fa-solid fa-left-long fa-2xl" style="color: #ffffff;" onclick="back()"></i>
+    <div>
+        <a>Bitte admin otk eingeben!</a>
+        <p><input type="text" id="otk" maxlength="100"></p>
+        <p><button onclick='window.location.href = "/admin?p=" + document.getElementById("otk").value'>Fertig</button></p>
+    </div>
+    <script>
+        function back(){
+            window.location.href = "/client/main/in.html"
+        }
+    </script>
+</body>
+</html>

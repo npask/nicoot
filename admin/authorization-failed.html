@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 | Zugriff verweigert</title>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        div{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: max-width;
+        }
+
+        a{
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        p{
+            color: grey;
+            font-size: 12px;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body onload="onload()">
+    <div>
+        <a>Der Zugriff auf <span id="web"></span> wurde verweigert</a>
+        <p>Du bist nicht zum Aufrufen dieser Seite autorisiert.</p>
+        <p>HTTP ERROR 403</p>
+    </div>
+    <script>
+        function onload(){
+            document.getElementById('web').innerText = window.location.pathname
+        }
+    </script>
+</body>
+</html>

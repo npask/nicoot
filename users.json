@@ -1,0 +1,115 @@
+[
+  {
+    "name": "nico",
+    "pass": "nico",
+    "call": "Nicolas",
+    "color": "#7aadff",
+    "lang": "German",
+    "friendsReq": [],
+    "friends": [
+      "alex",
+      "nico"
+    ],
+    "id": 1,
+    "rank": 3,
+    "MessageSound": "1",
+    "KlickSimulatorData": {
+      "click": 946813042676,
+      "clickvalue": 134217728,
+      "Autoklicker": 17,
+      "needadded": 27,
+      "autoadded": 17
+    }
+  },
+  {
+    "name": "alex",
+    "pass": "alex",
+    "call": "Alex",
+    "color": "#00ff59",
+    "lang": "German",
+    "friendsReq": [],
+    "friends": [],
+    "id": 1,
+    "rank": -1,
+    "KlickSimulatorData": {
+      "click": null,
+      "clickvalue": 1125899906842624,
+      "Autoklicker": 50,
+      "needadded": 50,
+      "autoadded": 50
+    },
+    "MessageSound": "5"
+  },
+  {
+    "name": "flo",
+    "pass": "flo",
+    "call": "Florian",
+    "color": "#ffffff",
+    "lang": "German",
+    "friendsReq": [],
+    "friends": [],
+    "id": 2,
+    "rank": -1,
+    "KlickSimulatorData": {
+      "click": 28711184104675,
+      "clickvalue": 1073741824,
+      "Autoklicker": 21,
+      "needadded": 30,
+      "autoadded": 21
+    },
+    "MessageSound": "5"
+  },
+  {
+    "name": "Nic",
+    "pass": "Nic",
+    "call": "Nic",
+    "color": "#ff0000",
+    "lang": "German",
+    "friendsReq": [],
+    "friends": [],
+    "id": 3,
+    "rank": -1,
+    "KlickSimulatorData": {
+      "click": 10,
+      "clickvalue": 2,
+      "Autoklicker": 0,
+      "needadded": 1,
+      "autoadded": 0
+    },
+    "MessageSound": "1"
+  },
+  {
+    "name": "noah-st",
+    "pass": "78zu/(ZU)",
+    "call": "Noah Steinhart",
+    "color": "#ff0000",
+    "lang": "German",
+    "friendsReq": [],
+    "friends": [],
+    "id": 4,
+    "rank": -1,
+    "MessageSound": "1",
+    "KlickSimulatorData": {
+      "click": 9,
+      "clickvalue": 8,
+      "Autoklicker": 0,
+      "needadded": 3,
+      "autoadded": 0
+    }
+  },
+  {
+    "name": "Edison",
+    "pass": "edi1234",
+    "call": "Edion Haziri",
+    "color": "#ff0000",
+    "lang": "German",
+    "friendsReq": [],
+    "friends": [],
+    "id": 5,
+    "rank": -1,
+    "MessageSound": "1",
+    "KlickSimulatorData": {
+      "click": null
+    }
+  }
+]

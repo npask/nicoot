@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Nicoot | Home</title>
+    <link rel="icon" href="/icon/Nicoot-full.png" type="image/png" />
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        @keyframes fadein {
+            0%{opacity: 0;}
+            70%{opacity: 0;}
+            100%{opacity: 1;}
+        }
+
+        @keyframes SlideInFromLeftVW {
+            0%{
+                width: 0px;
+                border-radius: 0px 10px 10px 0px;
+            }
+            90%{
+                border-radius: 0px 10px 10px 0px;
+            }
+            100%{
+                width: 100vw;
+                border-radius: 0px 2px 2px 0px;
+            }
+        }
+
+        @keyframes SlideInFromBottomVH {
+            0%{
+                height: 0px;
+                border-radius: 10px 10px 0px 0px;
+            }
+            100%{
+                height: 95vh;
+                border-radius: 10px 10px 0px 0px;
+            }
+        }
+
+        @keyframes SlideInFromLeftVWE {
+            0%{
+                margin-left: 0px;
+            }
+            100%{
+                margin-left: 10vw;
+            }
+        }
+      
+        @keyframes WidthFromZero {
+            0%{
+                width: 0px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sound -->
+    <audio src="/sound/loading.mp3" id="LoadingSound" loop></audio>
+    <audio src="/sound/Message1.mp3" id="Message1Sound"></audio>
+    <audio src="/sound/Message2.mp3" id="Message2Sound"></audio>
+    <audio src="/sound/Message3.mp3" id="Message3Sound"></audio>
+    <audio src="/sound/Message4.mp3" id="Message4Sound"></audio>
+    <audio src="/sound/Message5.mp3" id="Message5Sound"></audio>
+    <!-- Nav -->
+    <div class="topnav" id="topnav" style="top: -100%;display: none;">
+        <br>
+        <br>
+        <h1>Navigation</h1>
+        <br>
+        <div>Home</div>
+    </div>
+    <div class="siednav" id="sidenav" style="display:none">
+        <div>Home</div>
+        <div onclick="window.location.href = '/settings.html'">Settings</div>
+        <div style="color:red;bottom: 2%;position:absolute;" onclick="logout()">Logout</div>
+    </div>
+    <div class="top" id="NavTop" style="display:none">
+        <a class="title Handy" style="display: none;" id="sidenava">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+        <a class="title" style="color: transparent;">I</a> 
+        <a class="title" id="titleNav">Homemenu</a> 
+        <div class="search" id="searchNav">
+            <button>🔍</button>
+          <input placeholder="Search (Soon)" disabled>
+        </div>
+        <div class="name">
+            <div class="circle" id="Profilecircle">
+                <input type="color" style="border: 0px;width: 500%;height: 500%;position: absolute;top: 0px;left: 0px;transform: translate(-50%, -50%);">
+            </div>
+            <a id="name"><span id="dotloader"></span></a>
+            <a>🔹</a>
+            <a>🛎️</a>
+        </div>
+    </div>
+    <!-- Generel / Body-->
+    <div id="timeblack" style="position:absolute;top:0px;left:0px;width:100%;height:100%;background-color:black;text-align:center;z-index:1000;transition: all 0.7s;border-bottom: 1px solid white;">
+      <span class="loader"></span>
+    </div>
+    <div id="body" style="display:none">
+        <br>
+        <br>
+        <div class="notification" style="display:none"><h3>Es gab ein fehler bei der letzen Nico Systems develoption, bitte lade es neu runter! <a href="https://nico-coms-client-system.glitch.me">HIER</a></h3></div>
+        <h1 id="nameWelkome"></h1>
+        <a>Beta Tester</a>
+        <hr>
+        <h3>Friends:</h3>
+        <div id="friends"></div>
+        <hr>
+        <h3>Games:</h3>
+        <div id="games"></div>
+        <hr>
+    </div>
+    <div class="footter"><a href="/info/tos.html">TOS(Terms of Service)</a></div>
+    <!-- Game -->
+    <div id="GameStop" onclick="document.getElementById('GameStop').style.display = 'none';document.getElementById('GameStopDiv').style.top = '50%'" style="display:none;">
+      <img src="/icon/Nicoot.png">
+    </div>
+    <div id="GameStopDiv">
+      <button class="Resume" onclick="document.getElementById('GameStop').style.display = '';document.getElementById('GameStopDiv').style.top = ''">Resume</button>
+      <button class="Leave" onclick="document.getElementById('iframe').src = '/clean.html';document.getElementById('GameStop').style.display = 'none';document.getElementById('GameStopDiv').style.top = '';setTimeout(function(){document.getElementById('iframe').style.display = 'none';document.body.style.overflowY = 'auto'},500);document.body.style.overflowY = 'auto'">Leave Game</button>
+    </div>
+    <iframe id="iframe" src="/clean.html"></iframe>
+    <!-- Messages -->
+    <div style="display: none;" id="MessagesFromSystem">
+        <a class="title">Title</a>
+        <br>
+        <a>Subtitle Subtitle Subtitle Subtitle Subtitle</a>
+    </div>
+</body>
+<scripts>
+    <!-- Start -->
+    <script>
+        const socket = io()
+        let call;
+        let login;
+        let pass;
+        let mydata;
+        let error = false;
+        let friends;
+        let status;
+        let urlSplited = window.location.href.split('?')
+        let colors = null
+
+        document.body.onload = () =>{
+            if(localStorage.getItem('login') == null || localStorage.getItem('login') == 'null'){
+              window.location.href = "/login.html?tryed"
+            }
+            document.getElementById('LoadingSound').play()
+            socket.emit("TryLogin", localStorage.getItem('login'), true);
+            setInterval(backgroundUpdate,100)
+            setTimeout(function(){
+              let timeblack = document.getElementById('timeblack')
+              if(timeblack){
+                timeblack.innerHTML = '<span class="loader"></span><a style="color:grey">Wir haben leider Technische schwierigkeiten.<br>(Lade die Seite neu)</a>'
+              }
+            },7000)
+            loaders()
+            setInterval(loaders,1000)
+        }
+    </script>
+    <!-- Translator -->
+    <script src="./js/functions.js"></script>
+    <!-- Language -->
+    <script src="./js/GermanBase.js"></script>
+    <!-- Functions -->
+    <script src="./js/translator.js"></script>
+    <!-- Socket.io -->
+    <script>
+      
+    socket.on("SendTryLogin", (feedback, userdata) => {
+      if (feedback == true) {
+        mydata = JSON.parse(userdata);
+        if(document.getElementById('timeblack')){
+          setTimeout(function(){
+            startLoadAnimations()
+          },2000)
+          login = JSON.parse(userdata).name;
+          call = JSON.parse(userdata).call;
+          pass = JSON.parse(userdata).pass;
+          document.getElementById('Profilecircle').getElementsByTagName('input')[0].value = mydata.color
+          document.getElementById('Profilecircle').getElementsByTagName('input')[0].onchange = function (e) {
+            socket.emit('changeColor', login, pass, e.target.value)
+          }
+          document.getElementById('name').innerText = login
+          document.getElementById('nameWelkome').innerText = `Welcome back ${call},`
+          fetchGames()
+          setInterval(fetchGames,60000)
+          socket.emit("getDataColorFromUsers","")
+          setInterval(function(){socket.emit("getDataColorFromUsers","")},40000)
+          setTimeout(function(){
+            if(!error){
+              socket.emit("login", JSON.parse(userdata).name);
+            }
+          },5000)
+        }        
+      } else {
+        window.location.href = "/login.html?tryed"
+      }
+    });      
+      
+    socket.on('colors', (data) => {
+      colors = data
+      loadFriends()
+    })
+    </script>
+</scripts>
+</html>

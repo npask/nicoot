@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon/Nicoot-full.png" type="image/png" />
+    <title>Nicoot | Login</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background-color: black;
+        }
+
+        .background{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            transition: all 1s;
+        }
+
+        login{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 90%;
+            height: 50%;
+            background-color: #333333c5;
+            border: 1px solid white;
+            border-radius: 5px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        login input{
+          border-radius: 5px;
+          border: none;
+          text-align: center;
+        }
+
+        login button{
+          border-radius: 20px;
+          border: none;
+          padding: 5px;
+          background-color: lime;
+        }
+
+        #error{
+          position: absolute;
+          top: -10vh;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: red;
+          padding: 2vh;
+          border-radius: 5px;
+          overflow: hidden;
+          transition: cubic-bezier(0.5,0,0,0.5) 0.5s;
+        }
+
+        #error bar {
+          position: absolute;
+          bottom: 0px;
+          left: 0px;
+          width: 100%;
+          height: 10%;
+          background-color: white;
+        }
+
+        #error bar innerbar{
+          position: absolute;
+          bottom: 0px;
+          left: 0px;
+          height: 100%;
+          background-color: rgb(0, 255, 0);
+          animation: weg 5s linear;
+        }
+
+        @keyframes weg{
+          0%{width: 100%;}
+          100%{width: 0px;}
+        }
+
+        #WarningAudio{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            text-align: center;
+            transition: all 1s;
+            z-index: 1001;
+        }
+      
+        #loading{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            text-align: center;
+            transition: all 0.5s;
+            z-index: 1003;
+        }
+
+        #StartScreen{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            text-align: center;
+            transition: all 1s;
+            z-index: 1002;
+        }
+      
+        #StartScreen img {
+          position: absolute;
+          top: 25%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          width: 40vw;
+        }
+      
+        #StartScreen button {
+          position: absolute;
+          bottom: 25%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          width: 50vw;
+          border-radius: 20px;
+          border: none;
+          background-color: white;
+          color: black;
+          padding: 10px;
+          transition: all 0.3s;
+        }
+      
+        #StartScreen button:hover{
+          background-color: grey;
+        }
+
+        .audio-container {
+            position: relative;
+        }
+  
+        .audio-bars {
+            position: absolute;
+            bottom: 1vh;
+            left: 1vw;
+            display: flex;
+            flex-direction: row-reverse; /* Umkehrung der Reihenfolge der Balken */
+            rotate: 180deg;
+        }
+  
+        .audio-bar {
+            width: 1vw;
+            height: 50px;
+            background-color: white;
+            border-radius:20px;
+            margin-left: 5px;
+            -webkit-box-shadow: 0px 0px 20px 2px #FFFFFF; 
+            box-shadow: 0px 0px 20px 2px #FFFFFF;
+            transition: liniear 0.1s;
+        }
+      
+      .loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #FFF;
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #FF3D00;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+    
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+      .audioTitle{
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 5vh;
+        width: max-content;
+      }
+      
+      .audioTitle img {
+        position: absolute !important;
+        width: 3vw !important;
+        height: auto !important;
+        left: 50% !important;
+        top: -7vh !important;
+        transform: translateX(-50%) !important;
+        border-radius: 10px !important;
+      }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div id="WarningAudio" style="display: none;opacity: 0;">
+        <h3 style="color: red;">WARNUNG!</h3>
+        <p>Gleich kommt audio also wenn du irgent wo bist wo<br>audio nicht erlaubt ist schalte ihn schnell aus.</p>
+    </div>
+    <div id="StartScreen" style="display: none;opacity: 0;">
+        <audio id="audioPlayer" nocontrols loop></audio>
+        <img src="https://nicoot.glitch.me/icon/Nicoot-icoot-full.png">
+        <button onclick="pressedA()">Press A to start</button>
+        <div class="audio-bars" id="audioBars"></div>
+        <div class="audioTitle" id="audioTitle"><img id="img"><a id="title"></a><br><a id="author"></a></div>
+    </div>
+    <div id="loading" style="display: none;opacity: 0;">
+        <span class="loader"></span>
+    </div>
+    <div id="error" style="display: none;"><a>Seesion ended</a><bar><innerbar id="innerbar"></innerbar></bar></div>
+    <login>
+        <h1>Login:</h1>
+        <input placeholder="Username" type="text" id="Username">
+        <p></p>
+        <input placeholder="Password" type="password" id="Password">
+        <p></p>
+        <button onclick="TryLogin()">Ready?</button>
+        <p></p>
+        <a id="state"></a>
+    </login>
+</body>
+<script>
+  const socket = io()
+  let lastjson;
+  let datasend = 0;
+  let random = Math.floor(Math.random() * 2);
+  document.body.onload = () =>{load()}
+
+  function load(){
+    setInterval(function(){
+      if(document.getElementById('StartScreen').style.display == "" && document.getElementById('StartScreen').style.opacity == ""){
+        if(document.getElementById('audioPlayer').paused){
+          document.getElementById('audioPlayer').load()
+          document.getElementById('audioPlayer').play()
+        }        
+      } else {
+        document.getElementById('audioPlayer').pause()
+      }
+    },10000)
+    
+    document.getElementById('audioTitle').addEventListener('click', function(e){
+      document.getElementById('audioPlayer').play()
+    })
+    
+    document.body.onkeydown = (e) =>{
+      if(e.code == "Space"){
+        TryLogin()
+      }
+    }
+    
+    for (let i = 0; i < window.location.href.split('?').length; i++) {
+      let s = window.location.href.split('?')[i];
+      if(s == "tryed"){
+        document.getElementById('error').style.display = ""
+        setTimeout(() => {
+          document.getElementById('error').style.top = "1vh"
+        }, 1);
+        setTimeout(() => {
+          document.getElementById('error').style.top = ""
+          setTimeout(() => {
+            document.getElementById('error').style.display = "none"
+          }, 501);
+        }, 5000);
+      }
+    }
+    
+    if(random == 0){
+      document.getElementById('audioPlayer').src = "sound/Yoshi_s-Safari-_Grass-Land_.mp3"
+      document.getElementById('img').src = "/sound/Yoshi_s-Safari.png"
+      document.getElementById('title').innerText = "Yoshi's Safari Grass-Land"
+      document.getElementById('author').innerText = "nintendo"
+    } else if(random == 1){
+      document.getElementById('audioPlayer').src = "/sound/main-menu.m4a"
+      document.getElementById('title').innerText = "Main Menu (Xbox)"
+      document.getElementById('author').innerText = "Roblox"
+    }
+  }
+
+  function TryLogin() {
+    if (datasend != 1) {
+      datasend = 1;
+      lastjson = {
+        name: document.getElementById("Username").value,
+        pass: document.getElementById("Password").value,
+      };
+      socket.emit("TryLogin", JSON.stringify(lastjson));
+    }
+  }
+  
+  function pressedA(){ 
+    document.getElementById('audioPlayer').pause()
+    document.getElementById('loading').style.display = "" 
+    setTimeout(function(){
+      document.getElementById('loading').style.opacity = "" 
+      setTimeout(function(){
+        window.location.href = "/main/in.html" 
+      },2000)
+    },1)
+  }
+
+  socket.on("SendTryLogin", (feedback) => {
+    console.log(feedback)
+    if (feedback == true) {
+      document.getElementById("state").innerHTML =
+        "Status: <span style='color:lime'> Richtige Daten</span>";
+      localStorage.setItem("login", JSON.stringify(lastjson))
+      setTimeout(function () {
+        document.getElementById('WarningAudio').style.display = ""        
+        setTimeout(() => {
+            document.getElementById('WarningAudio').style.opacity = ""
+        }, 1);
+        setTimeout(() => {
+            document.getElementById('StartScreen').style.display = ""
+            setTimeout(() => {
+                document.getElementById('StartScreen').style.opacity = ""
+                document.body.onkeydown = (e) => {
+                  if(e.code == "KeyA"){
+                    pressedA()
+                  }
+                }
+                startStartScreen()
+            }, 1);
+        }, 6000);
+      }, 500);
+    } else {
+      datasend = 0
+      localStorage.setItem("login", null)
+      document.getElementById("state").innerHTML =
+        "Status: <span style='color:red'> Falsche Daten</span>";
+    }
+  });
+  
+  
+  var audioContext = null; 
+
+  function startStartScreen() {    
+    if('webkitAudioContext' in window){
+      audioContext = new webkitAudioContext();
+    } else if('AudioContext' in window ) {
+      audioContext = new AudioContext();
+    } else {
+      audioContext = null
+    }
+    
+    if (audioContext) {
+      const audioPlayer = document.getElementById('audioPlayer');
+      audioPlayer.load()
+      audioPlayer.play()
+      const analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaElementSource(audioPlayer);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+  
+      analyser.fftSize = 256;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+  
+      const audioBarsContainer = document.getElementById('audioBars');
+
+      const numberOfBars = 10;
+    
+      // Erstelle Audio-Balken
+      for (let i = 0; i < numberOfBars; i++) {
+        const audioBar = document.createElement('div');
+          audioBar.className = 'audio-bar';
+        audioBarsContainer.appendChild(audioBar);
+      }
+  
+      // Aktualisiere die Höhe der Balken basierend auf der Audio-Frequenz
+      function updateBars() {
+        analyser.getByteFrequencyData(dataArray);
+  
+        const audioBars = document.querySelectorAll('.audio-bar');
+  
+        audioBars.forEach((bar, index) => {
+          const barHeight = (dataArray[index] / 256) * 200; // Normalisierte Höhe
+          setTimeout(function(){
+            bar.style.height = `${barHeight}px`;
+          },5)
+        });
+  
+        requestAnimationFrame(updateBars);
+      }
+  
+      updateBars();
+    } else {
+        const audioPlayer = document.getElementById('audioPlayer');
+        document.getElementById('audioPlayer').load()
+        document.getElementById('audioPlayer').play()
+        console.error('AudioContext wird nicht unterstützt');
+    }
+
+  }
+</script>
+</html>

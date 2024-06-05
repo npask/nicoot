@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon/Nicoot-full.png" type="image/png" />
+    <title>Nicoot | Hello</title>
+  <style>
+    body{
+      text-align:center;
+      font-family: Arial;
+      transition: all 0.5s;
+      background-color:black;
+      color:white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nicoot</h1>
+  <p id="countdown">Warte ...</p>
+  <button onclick="window.location.href = '/login.html'">
+    Login
+  </button>
+</body>
+<script>
+let did = false
+  
+var countDownDate = new Date("Mar 5, 2024 12:00:00").getTime();
+var x = setInterval(function() {
+  var now = new Date().getTime();
+  var distance = countDownDate - now;
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  document.getElementById("countdown").innerHTML = "Noch " + days + " Tage, " + hours + " Stunden, " + minutes + " Minuten, " + seconds + " Sekunden bis zum release.";
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("countdown").innerHTML = "Der countdown ist Vorbei <br><br> Du kannst dich Anmelden und registrieren";
+  }
+}, 1000);
+  
+setInterval(function() {
+    if(localStorage.getItem('login') != null && did == false){
+      did = true
+      window.location.href = "/main/in.html"
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.body.style.background = "black";
+    document.body.style.color = "white";
+  } else {
+    document.body.style.background = "white";
+    document.body.style.color = "black";
+  }
+}, 100);
+</script>
+</html>

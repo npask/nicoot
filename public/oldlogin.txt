@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="return false;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="icon/Nicoot-full.png" type="image/png" />
+    <title>Nicoot | Login</title>
+    <style>
+      *,
+      *:before,
+      *:after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: black;
+        margin: 0px;
+        padding: 0px;
+        transition: all 0.5s;
+      }
+
+      form {
+        height: 90%;
+        width: 50%;
+        background-color: rgba(255, 255, 255, 0.13);
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+        padding: 50px 35px;
+        transition: all 1s;
+      }
+
+      form button#submit {
+        margin-left: 50%;
+        padding: 20px;
+        transform: translateX(-50%);
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      form * {
+        z-index: 5;
+        display: block;
+        filter: none;
+        font-family: "Poppins", sans-serif;
+        letter-spacing: 0.5px;
+        outline: none;
+        border: none;
+      }
+
+      .background {
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.5s;
+      }
+      .background .shape {
+        height: 200px;
+        width: 200px;
+        position: absolute;
+        border-radius: 50%;
+      }
+      .shape:first-child {
+        background: linear-gradient(#1845ad, #23a2f6);
+        left: -80px;
+        top: -80px;
+      }
+      .shape:last-child {
+        background: linear-gradient(to right, #ff512f, #f09819);
+        right: -30px;
+        bottom: -80px;
+      }
+      form h3 {
+        font-size: 32px;
+        font-weight: 500;
+        line-height: 42px;
+        text-align: center;
+      }
+
+      form label text {
+        font-size: xx-large;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+
+      label {
+        display: block;
+        margin-top: 5px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      input {
+        display: block;
+        height: 50px;
+        width: 100%;
+        border-radius: 3px;
+        padding: 0 10px;
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: 300;
+      }
+      ::placeholder {
+        color: #e5e5e5;
+      }
+      button:not(#submit) {
+        margin-top: 50px;
+        width: 100%;
+        background-color: #ffffff;
+        color: #080710;
+        padding: 15px 0;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+    <form onsubmit="return false;">
+      <label><text>Login</text></label
+      ><br />
+      <label for="fname">Benutzer:</label><br />
+      <input type="text" id="fname" /><br /><br />
+      <label for="fpass">Passwort:</label><br />
+      <input type="password" id="fpass" /><br /><br />
+      <button onclick="TryLogin()" id="submit">Fertig</button><br />
+      <label id="state"></label>
+    </form>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let socket = io();
+    let lastjson;
+    let datasend = 0;
+
+    window.onload = () => {
+      setInterval(UpdateStuff, 500);
+    };
+
+    function UpdateStuff() {
+      let time = new Date();
+      let now = time.getHours();
+      let inputs = ["fname", "fpass"];
+
+      let latitude = "";
+      let longitude = "";
+      let date = new Date();
+
+      if (navigator.language == "de") {
+        latitude = 51.1657;
+        longitude = 10.4515;
+      }
+
+      if (latitude != "" && longitude != "") {
+        let apiUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}&date=today&formatted=0`;
+
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            const sunse = new Date(data.results.sunrise);
+            const sunset = sunse.getHours();
+            const sunris = new Date(data.results.sunset);
+            const sunrise = sunris.getHours();
+
+            if (now >= sunset && now <= sunrise) {
+              document.body.style.backgroundColor = "white";
+              document.body.style.color = "black";
+              document.getElementById("submit").style.color = "black";
+              document.getElementById("submit").style.backgroundColor =
+                "rgba(0,0,0,0.07)";
+              for (let i = 0; i < inputs.length; i++) {
+                const s = inputs[i];
+                document.getElementById(s).style.backgroundColor =
+                  "rgba(0,0,0,0.07)";
+              }
+            } else {
+              document.body.style.backgroundColor = "black";
+              document.body.style.color = "white";
+              document.getElementById("submit").style.color = "white";
+              document.getElementById("submit").style.backgroundColor =
+                "rgba(255,255,255,0.07)";
+              for (let i = 0; i < inputs.length; i++) {
+                const s = inputs[i];
+                document.getElementById(s).style.backgroundColor =
+                  "rgba(255,255,255,0.07)";
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Fehler beim Abrufen des Sonnenuntergangs:", error);
+          });
+      }
+    }
+
+    function TryLogin() {
+      if (datasend != 1) {
+        datasend = 1;
+        lastjson = {
+          name: document.getElementById("fname").value,
+          pass: document.getElementById("fpass").value,
+        };
+        socket.emit("TryLogin", JSON.stringify(lastjson));
+      }
+    }
+
+    socket.on("SendTryLogin", (feedback) => {
+      if (feedback == true) {
+        document.getElementById("state").innerHTML =
+          "Status: <span style='color:lime'> Richtige Daten</span>";
+        localStorage.setItem("login", JSON.stringify(lastjson));
+        setTimeout(function () {
+          window.location.href = "/main/in.html";
+        }, 500);
+      } else {
+        datasend = 0;
+        document.getElementById("state").innerHTML =
+          "Status: <span style='color:red'> Falsche Daten</span>";
+      }
+    });
+  </script>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicoot | Settings</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 80%;
+            background-color: rgb(46, 46, 46);
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        input.color{
+            padding: 0px;
+            margin: 0px;
+            border: none;
+            border-radius: 5px;
+            overflow: hidden;
+            box-sizing: unset;
+            height: 1.1em;
+        }
+
+        input[type=text]{
+            border-radius: 20px;
+            border: none;
+            background-color: white;
+            color: black;
+            text-align: center;
+            padding: 2px;
+        }
+
+        button{
+            background-color: rgba(145, 255, 145, 0.2);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+
+        button:hover{
+            scale: 1.1;
+        }
+
+        #black{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body onload="load()">
+    <audio src="/sound/Message1.mp3" id="Message1Sound"></audio>
+    <audio src="/sound/Message2.mp3" id="Message2Sound"></audio>
+    <audio src="/sound/Message3.mp3" id="Message3Sound"></audio>
+    <audio src="/sound/Message4.mp3" id="Message4Sound"></audio>
+    <audio src="/sound/Message5.mp3" id="Message5Sound"></audio>
+    <h1>Settings</h1>
+    <a>Language: </a><br>
+    <select id="language">
+        <option>English</option>
+        <option>German</option>
+    </select>
+    <br><br>
+    <a>Color:</a><br>
+    <input id="color" class="color" type="color">
+    <br><br>
+    <a>How we can Call you(only you cann see it):</a><br>
+    <input type="text" id="callname" placeholder="Wating for Data..." maxlength="20">
+    <br><br>
+    <a>Public name:</a><br>
+    <input type="text" id="publicname" placeholder="Wating for Data..." maxlength="20">
+    <br><br>
+    <a>Message Sound:</a><br>
+    <select id="MessageSound" onchange="playSound(this)">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
+    <br><br>
+    <button onclick="save()">
+        Save
+    </button>
+    <div id="black"><h1>Wating For Data...</h1></div>
+    <script>
+        const socket = io()
+        let userdata = null
+        let getted = false
+        let newName = undefined
+        let call = undefined
+        let color = undefined
+        let lang = undefined
+        let MessageSound = undefined
+        
+        function playSound(element){
+          document.getElementById('Message'+element.value+'Sound').play()
+        }
+
+        function load(){
+            if(localStorage.getItem('login') == null || localStorage.getItem('login') == 'null'){
+              //window.location.href = "/login.html?tryed"
+            }
+            socket.emit("TryLogin", localStorage.getItem('login'), true);  
+        }
+
+        socket.on("SendTryLogin", (feedback, userdataa) => {
+            if (feedback == true) {
+                getted = true
+                userdata = JSON.parse(userdataa)
+                if(document.getElementById('black')){document.getElementById('black').remove()}
+                document.getElementById('color').value = userdata.color
+                document.getElementById('callname').value = userdata.call
+                document.getElementById('publicname').value = userdata.name
+                for (let i = 0; i < document.getElementById('language').querySelectorAll("*").length; i++) {
+                    const s = document.getElementById('language').querySelectorAll("*")[i];
+                    if(s && s.innerHTML == userdata.lang){
+                        s.selected = true
+                    }
+                }
+                for (let i = 0; i < document.getElementById('MessageSound').querySelectorAll("*").length; i++) {
+                    const s = document.getElementById('MessageSound').querySelectorAll("*")[i];
+                    if(s && userdata.MessageSound && s.innerHTML == userdata.MessageSound){
+                        s.selected = true
+                    }
+                }
+            }        
+        }); 
+
+        function save(){
+            if(getted){
+                let element = document.createElement('div')
+                element.innerHTML = "<h1>Sending ...</h1>"
+                element.id = "black"
+                document.body.appendChild(element)
+              
+                if(document.getElementById('language').getElementsByTagName('option')[document.getElementById('language').selectedIndex] != userdata.lang){
+                    lang = document.getElementById('language').getElementsByTagName('option')[document.getElementById('language').selectedIndex].innerHTML
+                    console.log('New Language')
+                }                
+                if(!userdata.MessageSound || document.getElementById('MessageSound').getElementsByTagName('option')[document.getElementById('MessageSound').selectedIndex] != userdata.MessageSound){
+                    MessageSound = document.getElementById('MessageSound').getElementsByTagName('option')[document.getElementById('MessageSound').selectedIndex].innerHTML
+                    console.log('New Message Sound')
+                }
+
+                if(document.getElementById('publicname').value != userdata.name){
+                    newName = document.getElementById('publicname').value
+                    window.localStorage.setItem('login', JSON.stringify({name: newName, pass: userdata.pass}))
+                    console.log('New Name')
+                }
+                if(document.getElementById('callname').value != userdata.call){
+                    call = document.getElementById('callname').value
+                    console.log('New Call name')
+                }
+                if(document.getElementById('color').value != userdata.color){
+                    color = document.getElementById('color').value
+                    console.log('New Color')
+                }
+
+                setTimeout(function(){socket.emit("CangeAccountData", userdata.name, userdata.pass, newName, call, color, lang, MessageSound)},1)
+
+                setTimeout(function(){window.location.href = "/main/in.html"},500)
+            }
+        }
+    </script>
+</body>
+</html>
