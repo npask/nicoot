@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang=”en” manifest="/cache.appcache">
+    <head>
+        <title id="titlea">N Musik x Player</title>
+        <meta name="description" content="The description should optimally be between 150-160 characters.">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="">
+        <meta charset = “UTF-8“>
+        <link rel="stylesheet" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/css/font-awesome.css" />
+        <link rel="stylesheet" href="./data/style/style.css">
+        <script src="https://kit.fontawesome.com/04b3ed5844.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200&family=Kanit:wght@200&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="../img/favicon.png">
+
+		    <!-- ================= Login Sy ================= -->
+	    	<script type="text/javascript" src="https://www.authpro.com/auth/N_Musik/?action=pp"></script>
+    </head>
+    <body onload="load()">
+      <!--Infomation Bar-->
+      <div id="snackbar"></div>
+        <!--Navigation-->
+        <ul>
+            <li><a class="active" href="https://n-musik.netlify.app/musik/Player.html">Startseite <i class="fa-solid fa-house fa-beat" style="color: #ffffff;"></i></a></li>
+            <li><a href="404">Playlists <i class="fa-solid fa-lock" style="color: #ffffff;"></i></a></li>
+            <li><a href="https://n-musik.netlify.app/in.html">Konto <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></li>
+            <li><a onclick="openeinstelungen()">Einstellungen</a></li>
+            <li><a onclick="openflatver()">Flat</a></li>
+        </ul>
+          <ul id="tf">
+           <li id="imag"><img src="data/image/no.png" class="imageso"></li>
+           <li><br><span id="TT" style="font-size: larger;"></span></li>
+           <li><br><span id="TA" class="von"></span></li>
+           <li style="display: inline-block;" id="controls"><span onclick="zz()"><i class="fa-solid fa-angles-right fa-rotate-180 fa-2xl" style="color: #ffffff;"></i></span>|<span id="toggle" onclick="toggle()"><i class="fa-solid fa-play fa-2xl" style="color: #2cf243;"></i></span>|<span id="LT" onclick="LOOP()"><i class="fa-solid fa-rotate-left fa-2xl"></i></span>|<span onclick="zf()"><i class="fa-solid fa-angles-right fa-2xl" style="color: #ffffff;"></i></span></li>
+        </ul>
+        <ul id="d"><li onclick="toggle()"><i class="fa-solid fa-play fa-2xl" style="color: #2cf243;margin-left: 43%; margin-top: 13%;"></i></li></ul>
+
+  <div class="ul">
+    <div class="ul_end">
+     <div class="li"><div class="progress_bar" id="progress_bar"><div class="progressed" id="progressed"></div></div><!--<progress id="p" class="Play"></progress>--></div>
+     <div style="margin-left: 70%;display: none;"><i class="fa-solid fa-volume-high"></i><a>     </a><input type="range" id="vol" onchange="setVolume(document.getElementById('vol').value)" style="width: 100px;" value="0.5" step="0.01" max="1.0"><br></div></div>
+    </div>
+  </div>
+  </div>
+    <div class="li_end" id="musik2">
+        <!--Einstelungen-->
+        <div class="settings" id="settings">
+          <h1><i class="fa-solid fa-chevron-left fa-lg" style="color: #ffffff;" onclick="closeeinstelungen()"></i><a>    </a>Einstellungen</h1>
+          <a>Keine Einstellungen</a>
+        </div>
+        <!--flatver-->
+        <div class="flatver" id="flatver">
+          <h1 class="fa-solid fa-chevron-left fa-2xl" style="color: #ffffff;" onclick="closeflatver()"></h1>
+          <h2 class="textf" id="tfl"></h2>
+          <a class="authorf" id="afl"></a>
+          <div style="position: absolute;right: 20px; bottom: 21%;"><span id="togglef" onclick="toggle()"><i class="fa-solid fa-play fa-2xl" style="color: #2cf243;"></i></span></div>
+          <span id="image"><img class="imageno" src="./data/image/no.png"></img></span>
+          <a id="background"></a>
+          <div style="display: none;" class="progress_barflat" id="progress_barflat"><div class="progressedflat" id="progressedflat"></div></div>
+        </div>
+        <!--Hier die Sachen-->
+        <h1>Guten Tag, <span id="name"></span><br><span id="apple"></span></h1>
+        <!--W Musik-->
+        <div id="id01" class="modal">
+          <p class="flash" style="display: block;text-align: center;">Bitte Warten...</p>
+          <div class="loader"></div>
+        </div>
+        <!--W Musik ende-->
+        <div id="musik"></div>
+        <div id="ttf"></div>
+        <a id="D" style="visibility: hidden;"></a>
+
+      <div id="da">
+        <audio id="a" ontimeupdate="Update()" onended="END()" onpause="Paused()" onplaying="Playing()">
+        </audio>
+      </div>
+      </div>
+      <script src="./data/js/general.js"></script>
+      <script src="./data/js/musikplay.js"></script>
+      <script src="./data/js/inmusik.js"></script>
+      <script src="./data/js/flatver.js"></script>
+      <script>
+      addEventListener("load", (event) => {let mql = window.matchMedia("(max-width: 600px)");
+        var il = 0;
+        if(il==0){document.getElementById('D').innerHTML = mql.matches;il++}
+       if(document.getElementById('D').innerHTML == "true"){location.href = "indexhandy.html"}
+      });
+
+      window.onclick = function(event) {
+      if (event.target == "modal") {
+        modal.style.display = "none";
+       }
+      }
+      progress_bar.onclick = function(e) {usongcs(e)};
+      function openwm(title,author) {
+        document.getElementById('id01').style.display='block';
+        document.getElementById('id01t').innerHTML = title;
+        document.getElementById('id01a').innerHTML = author;
+      }
+      function openeinstelungen() {document.getElementById('settings').style.display='block';}
+      function closeeinstelungen() {document.getElementById('settings').style.display='none';}
+      </script>
+      <script id="for">
+        function testofskip() {if(musik=='none'){setIT('say_so', 'Doja Cat', 'Say So')};if(musik=='say_so'){setIT('therapy', 'Crono', 'Therapy')};if(musik=='therapy'){setIT('flovers', 'Miley Cyrus', 'Flovers')};if(musik=='flovers'){setIT('night_dancer', 'imase', 'Night Dancer')};if(musik=='night_dancer'){setIT('multidimensional', 'Sarah, the Illstrumentalist', 'Multidimensional')};if(musik=='multidimensional'){setIT('mach_die_robbe', 'Julien Bam', 'Mach die Robbe')};if(musik=='mach_die_robbe'){setIT('turn_up', 'Monako', 'Turn Up')};if(musik=='turn_up'){setIT('friday', 'Mufasa & Hypeman', 'Friday')};if(musik=='friday'){setIT('kann_es_sein_das_du_dumm_bist', 'Das Lumpenpack', 'Kann es sein, dass du dumm bist?')};if(musik=='kann_es_sein_das_du_dumm_bist'){setIT('feuerwerk', 'Wincent Weiss', 'Feuerwerk (Lyrics)')};if(musik=='feuerwerk'){setIT('we_are_the_robots', 'Insan3lik3(feat. Temu)', 'We Are the Robots')};if(musik=='we_are_the_robots'){setIT('west_coast', 'OneRepublic', 'West Coast')};if(musik=='west_coast'){setIT('i_aint_worried', 'OneRepublic', 'I Aint Worried')};if(musik=='i_aint_worried'){setIT('sunshine', 'OneRepublic', 'Sunshine')};if(musik=='sunshine'){setIT('keep_it_running', 'imprismed', 'Keep it Running')};if(musik=='keep_it_running'){setIT('super_sonic_racing', 'Unbekannt', 'Super Sonic Racing')};if(musik=='super_sonic_racing'){setIT('how_about_an_old_fashioned', 'Harper Rey', 'How About an Old Fashioned')};if(musik=='how_about_an_old_fashioned'){setIT('hayat', 'OOYY', 'Hayat')};if(musik=='hayat'){setIT('1am_omw', 'Ballpoint', '1am Omw')};if(musik=='1am_omw'){setIT('its_not_me', 'Arthur Benson', 'Its Not Me')};if(musik=='its_not_me'){setIT('reese_puff', 'Beenux', 'Mario tries Reese’s puffs')};}
+      </script>
+    </body>
+</html>

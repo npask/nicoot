@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang=”en” manifest="/cache.appcache">
+    <head>
+        <title id="titlea">N Musik x Echo Player</title>
+        <meta name="description" content="The description should optimally be between 150-160 characters.">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="">
+        <meta charset = “UTF-8“ />
+        <link rel="stylesheet" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/css/font-awesome.css" />
+        <link rel="stylesheet" href="./data/style/styleh.css">
+        <script src="https://kit.fontawesome.com/04b3ed5844.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200&family=Kanit:wght@200&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="../img/favicon.png">
+
+		    <!-- ================= Login Sy ================= -->
+	    	<script type="text/javascript" src="https://www.authpro.com/auth/N_Musik/?action=pp"></script>
+    </head>
+    <body onload="load()">
+        <!--Navigation-->
+        <ul>
+            <li><a class="active" href="https://n-musik.netlify.app/musik/Player.html">Start <i class="fa-solid fa-house fa-beat" style="color: #ffffff;"></i></a></li>
+            <li><a href="404">Playlists <i class="fa-solid fa-lock" style="color: #ffffff;"></i></a></li>
+            <li><a href="https://n-musik.netlify.app/in.html">Konto <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></li>
+            <li><a class="no">(Echo Ver)</a></li>
+            <li><a class="no"><img src="../img/logo.png" width="100%"></a></li>
+        </ul>
+  <div class="ul">
+    <div class="li_end">
+     <div class="li"><div class="progress_bar" id="progress_bar"><div class="progressed" id="progressed"></div></div><!--<progress id="p" class="Play"></progress>--></div>
+     <div class="li" id="imag"><img src="data/image/no.png" class="imageso"></div>
+     <div><br><a>   </a><span id="TT" style="font-size:medium;">X</span><br><a>   </a><span id="TA" class="von">X</span></div>
+     <div style="margin-left: 0px;display: block; margin-top: 30px;"><a><a><span onclick="zz()"><i class="fa-solid fa-angles-right fa-rotate-180 fa-2xl" style="color: #ffffff;"></i><a> | </a><span id="toggle" style="max-width:40px;max-height:39px" onclick="toggle()"></a><i class="fa-solid fa-play fa-2xl" style="color: #2cf243;"></i></span></a></a><a> | </a><a><span id="LT" onclick="LOOP()"><i class="fa-solid fa-rotate-left fa-2xl"></i></span></a><a> | </a><a><span onclick="zf()"><i class="fa-solid fa-angles-right fa-2xl" style="color: #ffffff;"></i></span></a></div>
+    </div>
+  </div>
+  </div>
+    <div class="li_end" id="musik2">
+      <div class="alert warning">
+        <span class="closebtn">&times;</span>  
+        <strong>Warnung!</strong> Dies ist eine Echo(Amazone,nicth große höhen geräte) Version.
+      </div>
+        <!--Hier die Sachen-->
+        <h1>Guten Tag, <span id="name"></span><br></h1>
+        <div id="musik"></div>
+        <div id="ttf"><span id="tf"></span></div>
+        <div id="snackbar"></div>
+
+      <div id="da">
+        <audio id="a" ontimeupdate="Update()" onended="END()" onpause="Paused()" onplaying="Playing()">
+        </audio>
+      </div>
+      </div>
+      <script src="./data/js/general.js"></script>
+      <script src="./data/js/musikplay.js"></script>
+      <script src="./data/js/inmusik.js"></script>
+      <script>progress_bar.onclick = function(e) {usongcs(e)}</script>
+    </body>
+</html>

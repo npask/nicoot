@@ -1,0 +1,32 @@
+<!--Wilkommen seite-->
+<html>
+    <head>
+        <title>N Musik -> Fehler</title>
+        <script src="https://kit.fontawesome.com/04b3ed5844.js" crossorigin="anonymous"></script>
+    </head>
+    <body onload="typeWriter()">
+        <p id="bye" class="bye"></p>
+        <script>
+            var i = 0;
+            var txt = 'Ein Fehler ist aufgetreten, Weiteleitung, Bitte Warten ............................................................................................................................................................................................................................................................................................................................................................................................................................................................';
+            var speed = 90;
+            function typeWriter() {
+              if (i < txt.length) {
+                document.getElementById("bye").innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+              }
+            }
+        </script>
+        <script type="text/javascript">
+            window.setTimeout('location.href="https://n-musik.netlify.app"', 10000);
+        </script>
+        <style>
+            .bye {
+                text-align: center;
+                color: red;
+                font-size: 3em;
+            }
+        </style>
+    </body>
+</html>

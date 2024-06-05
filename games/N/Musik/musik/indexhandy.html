@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang=”en” manifest="/cache.appcache">
+    <head>
+        <title id="titlea">N Musik x Handy Player</title>
+        <meta name="description" content="The description should optimally be between 150-160 characters.">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="">
+        <meta charset = “UTF-8“ />
+        <link rel="stylesheet" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/css/font-awesome.css" />
+        <link rel="stylesheet" href="./data/style/styleh.css">
+        <script src="https://kit.fontawesome.com/04b3ed5844.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200&family=Kanit:wght@200&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="../img/favicon.png">
+
+		    <!-- ================= Login Sy ================= -->
+	    	<script type="text/javascript" src="https://www.authpro.com/auth/N_Musik/?action=pp"></script>
+    </head>
+    <body onload="load()">
+        <!--Navigation-->
+        <ul>
+            <li><a class="active" href="https://n-musik.netlify.app/musik/Player.html">Start <i class="fa-solid fa-house fa-beat" style="color: #ffffff;"></i></a></li>
+            <li><a href="404">Playlists <i class="fa-solid fa-lock" style="color: #ffffff;"></i></a></li>
+            <li><a href="https://n-musik.netlify.app/in.html">Konto <i class="fa-solid fa-address-card" style="color: #ffffff;"></i></a></li>
+            <li><a class="no">(Handy Ver)</a></li>
+            <li><a class="no"><img src="../img/logo.png" width="100%"></a></li>
+        </ul>
+  <div class="ul">
+    <div class="li_end">
+     <div class="li"><div class="progress_bar" id="progress_bar"><div class="progressed" id="progressed"></div></div><!--<progress id="p" class="Play"></progress>--></div>
+     <div class="li" id="imag"><img src="data/image/no.png" class="imageso"></div>
+     <div><br><a>   </a><span id="TT" style="font-size:medium;">X</span><br><a>   </a><span id="TA" class="von">X</span></div>
+     <div style="margin-left: 0px;display: block; margin-top: 30px;"><a><a><span onclick="zz()"><i class="fa-solid fa-angles-right fa-rotate-180 fa-2xl" style="color: #ffffff;"></i><a> | </a><span id="toggle" style="max-width:40px;max-height:39px" onclick="toggle()"></a><i class="fa-solid fa-play fa-2xl" style="color: #2cf243;"></i></span></a></a><a> | </a><a><span id="LT" onclick="LOOP()"><i class="fa-solid fa-rotate-left fa-2xl"></i></span></a><a> | </a><a><span onclick="zf()"><i class="fa-solid fa-angles-right fa-2xl" style="color: #ffffff;"></i></span></a></div>
+    </div>
+  </div>
+  </div>
+    <div class="li_end" id="musik2">
+      <div class="alert warning">
+        <span class="closebtn">&times;</span>  
+        <strong>Warnung!</strong> Dies ist eine Handy Version.
+      </div>
+        <!--Hier die Sachen-->
+        <h1>Guten Tag, <span id="name"></span><br></h1>
+        <div id="musik"></div>
+        <div id="ttf"><span id="tf"></span></div>
+        <div id="snackbar"></div>
+        <a id="d" style="display: none;"></a>
+
+      <div id="da">
+        <audio id="a" ontimeupdate="Update()" onended="END()" onpause="Paused()" onplaying="Playing()">
+        </audio>
+      </div>
+      </div>
+      <script src="./data/js/general.js"></script>
+      <script src="./data/js/musikplay.js"></script>
+      <script src="./data/js/inmusik.js"></script>
+      <script>progress_bar.onclick = function(e) {usongcs(e)}</script>
+      <script id="for">
+        function testofskip() {if(musik=='none'){setIT('say_so', 'Doja Cat', 'Say So')};if(musik=='say_so'){setIT('therapy', 'Crono', 'Therapy')};if(musik=='therapy'){setIT('flovers', 'Miley Cyrus', 'Flovers')};if(musik=='flovers'){setIT('night_dancer', 'imase', 'Night Dancer')};if(musik=='night_dancer'){setIT('multidimensional', 'Sarah, the Illstrumentalist', 'Multidimensional')};if(musik=='multidimensional'){setIT('mach_die_robbe', 'Julien Bam', 'Mach die Robbe')};if(musik=='mach_die_robbe'){setIT('turn_up', 'Monako', 'Turn Up')};if(musik=='turn_up'){setIT('friday', 'Mufasa & Hypeman', 'Friday')};if(musik=='friday'){setIT('kann_es_sein_das_du_dumm_bist', 'Das Lumpenpack', 'Kann es sein, dass du dumm bist?')};if(musik=='kann_es_sein_das_du_dumm_bist'){setIT('feuerwerk', 'Wincent Weiss', 'Feuerwerk (Lyrics)')};if(musik=='feuerwerk'){setIT('we_are_the_robots', 'Insan3lik3(feat. Temu)', 'We Are the Robots')};if(musik=='we_are_the_robots'){setIT('west_coast', 'OneRepublic', 'West Coast')};if(musik=='west_coast'){setIT('i_aint_worried', 'OneRepublic', 'I Aint Worried')};if(musik=='i_aint_worried'){setIT('sunshine', 'OneRepublic', 'Sunshine')};if(musik=='sunshine'){setIT('keep_it_running', 'imprismed', 'Keep it Running')};if(musik=='keep_it_running'){setIT('super_sonic_racing', 'Unbekannt', 'Super Sonic Racing')};if(musik=='super_sonic_racing'){setIT('how_about_an_old_fashioned', 'Harper Rey', 'How About an Old Fashioned')};if(musik=='how_about_an_old_fashioned'){setIT('hayat', 'OOYY', 'Hayat')};if(musik=='hayat'){setIT('1am_omw', 'Ballpoint', '1am Omw')};if(musik=='1am_omw'){setIT('its_not_me', 'Arthur Benson', 'Its Not Me')};if(musik=='its_not_me'){setIT('reese_puff', 'Beenux', 'Mario tries Reese’s puffs')};}
+      </script>
+    </body>
+</html>

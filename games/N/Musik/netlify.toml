@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/*"
+  to = "/Musik Streaming/404.html" #-change-path-here-and-delete-this-comment
+  status = 404

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+
+	<head onloadstart="load()">
+		<meta charset="utf-8">
+        <title>N Musik x Start</title>
+        <meta name="description" content="The description should optimally be between 150-160 characters.">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Madeon08">
+        <link rel="stylesheet" href="css/font-awesome.min.css" />
+        <link rel="stylesheet" href="css/font-awesome.css" />
+		<script src="https://kit.fontawesome.com/04b3ed5844.js" crossorigin="anonymous"></script>
+
+        <!-- ================= Favicon ================== -->
+        <!-- Standard -->
+        <link rel="shortcut icon" href="img/favicon.png">
+        <!-- Retina iPad Touch Icon-->
+        <link rel="apple-touch-icon" sizes="144x144" href="img/favicon-retina-ipad.png">
+        <!-- Retina iPhone Touch Icon-->
+        <link rel="apple-touch-icon" sizes="114x114" href="img/favicon-retina-iphone.png">
+        <!-- Standard iPad Touch Icon--> 
+        <link rel="apple-touch-icon" sizes="72x72" href="img/favicon-standard-ipad.png">
+        <!-- Standard iPhone Touch Icon--> 
+        <link rel="apple-touch-icon" sizes="57x57" href="img/favicon-standard-iphone.png">
+
+        <!-- ============== Resources style ============== -->
+        <link rel="stylesheet" href="css/style.css" />
+
+		<!-- Authpro -->
+		<script src="https://www.authpro.com/js/auth.js"></script>
+		<script>
+ 			 var ap=new AuthPro('N_Musik');
+		</script>
+	</head>
+	
+	<body onload="load()">
+
+		<!-- Page preloader -->
+		<div id="loading">
+			<div id="preloader">
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+
+		<!-- Overlay and Star effect -->
+		<div class="global-overlay">
+			<div class="overlay skew-part">
+
+				<div id='stars'></div>
+				<div id='stars2'></div>
+				<div id='stars3'></div>
+
+			</div>
+		</div>
+
+		<!-- START - Home/Left Part -->
+		<section id="left-side">
+
+			<!-- Your logo -->
+			<img src="img/logo.png" alt="" class="brand-logo" />
+
+			<div class="content">
+
+				<h1 class="text-intro opacity-0">N Musik<br></h1>
+				<hr>
+				<p class="text-intro opacity-0" id="random">Lädt...</p>
+				<br>
+				<nav>
+					<ul>
+						<li>
+							<a href="https://authpro.com/auth/N_Musik/" class="light-btn text-intro opacity-0">Anmelden</a>
+						</li>
+						<li>
+							<a href="https://CNServices.netlify.app" class="action-btn trigger text-intro opacity-0">Anderer Service</a>
+						</li>
+					</ul>
+				</nav>
+
+			</div>
+
+			<!-- Social icons -->
+			<div class="social-icons">
+
+
+
+			</div>
+
+		</section>
+		<!-- END - Home/Left Part -->
+
+			<footer>
+
+				<p style="color:white">N Musik ©. All rights resevd by <a href="https://CNServices.netlify.app"  style="color:white">CN Services</a></p>
+
+			</footer>
+
+		</section>
+
+	<!-- * Libraries jQuery, Easing and Bootstrap - Be careful to not remove them * -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.easings.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+	<!-- PhotoSwipe Core JS file -->
+	<script src="js/velocity.min.js"></script> 
+
+	<!-- PhotoSwipe UI JS file -->
+	<script src="js/velocity.ui.min.js"></script> 
+
+	<!-- Slideshow/Image plugin -->
+	<script src="js/vegas.js"></script>
+	<!-- Main JS File -->
+	<script src="js/main.js"></script>
+	<script src="js/status.js"></script>
+	</body>	
+	<!-- Load/Del/Schreib -->
+	<script>
+		function load() {
+			deleteElements()
+			random()
+		}
+		function deleteElements() {
+			var elements = document.getElementsByTagName('body')[0].children;
+			for (var i = elements.length - 1; i >= 0; i--) {
+				if (elements[i].tagName !== 'SCRIPT') {
+					if (elements[i].tagName !== 'HEADER') {
+						if (elements[i].tagName !== 'META') {
+							if (elements[i].tagName !== 'STYLE') {
+								if (elements[i].tagName !== 'LINK') {
+									if (elements[i].tagName !== 'TITLE') {
+										 if (elements[i].tagName !== 'A') {
+											if (elements[i].tagName !== 'STYLE') {
+												if (elements[i].tagName !== 'SECTION') {
+													if (elements[i].tagName !== 'DIV') {
+														if (elements[i].tagName !== 'FOOTER') {
+															 elements[i].parentNode.removeChild(elements[i]);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		function random() {
+			let text;
+			switch (Math.floor(Math.random() * 3)) {
+  case 0:
+    text = "Joine heute noch N Musik.";
+    break;
+  case 1:
+  text = "Es ist kostenlos.";
+    break;
+  case 2:
+  text = "Keine Werbung.";
+    break;
+  case 3:
+  text = "Alpha ver. 1";
+
+}
+			document.getElementById("random").innerHTML = text;
+		}
+	</script>
+	</body>
+</html>
