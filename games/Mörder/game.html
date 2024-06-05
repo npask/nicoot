@@ -1,0 +1,216 @@
+<style>
+        @import url('https://fonts.cdnfonts.com/css/public-pixel');
+  
+        .roleAnimation{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-family: 'Public Pixel', sans-serif;
+            text-align: center;
+            animation: FadeIn 0.5s ease-in-out;
+        }
+
+        .roleAnimation.imposter h1{
+            color: red;
+            animation: OpenAnimationh 2s ease-in-out;
+        }
+        .roleAnimation.imposter a{
+            color: white;
+            display: block;
+            font-size: smaller;
+            animation: OpenAnimationA 2s ease-in-out;
+        }
+
+        .roleAnimation.crewmate h1{
+            color: aqua;
+            animation: OpenAnimationh 2s ease-in-out;
+        }
+        .roleAnimation.crewmate a{
+            color: white;
+            display: block;
+            font-size: smaller;
+            animation: OpenAnimationA 2s ease-in-out;
+        }
+
+        .roleAnimation.imposter .players{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 90%;
+            background-color: #ff0000b3;
+            border-radius: 50%;
+            -webkit-box-shadow: 0px 0px 25px 16px #ff0000b3; 
+            box-shadow: 0px 0px 12.5px 16px #ff0000b3;
+            overflow: hidden;
+            padding: 2px;
+            animation: imposterRolePlayersAnimation 4s ease-out;
+        }
+
+        .roleAnimation.crewmate .players{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 90%;
+            background-color: #00f7ffb3;
+            border-radius: 50%;
+            -webkit-box-shadow: 0px 0px 25px 16px #00f7ffb3; 
+            box-shadow: 0px 0px 12.5px 16px #00f7ffb3;
+            overflow: hidden;
+            padding: 2px;
+            animation: imposterRolePlayersAnimation 4s ease-out;
+        }
+
+        @keyframes imposterRolePlayersAnimation {
+            0%{width: 0px;box-shadow: 0px 0px 0px 0px transparent;padding: 0px;}
+            30%{width: 0px;padding: 0px;}
+        }
+
+        @keyframes OpenAnimationh {
+            0%{
+                opacity: 0;
+                transform: translateY(-150%);
+            }
+        }
+
+        @keyframes OpenAnimationA {
+            0%{
+                opacity: 0;
+                transform: translateY(-250%);
+            }
+        }
+
+        @keyframes FadeIn {
+            0%{opacity: 0;}
+        }
+</style>
+    <div>
+        <audio src="./Defeat.mp3" id="DefeatSound" onloadeddata="loaded++"></audio>
+        <audio src="./Victory.mp3" id="VictorySound" onloadeddata="loaded++"></audio>
+        <audio src="./Disconnected.mp3" id="DisconnectedSound" onloadeddata="loaded++"></audio>
+        <audio src="./Role.mp3" id="RoleSound" onloadeddata="loaded++"></audio>
+        <audio src="/src/sound/normal.mp3" id="NormalSound" onloadeddata="loaded++" loop></audio>
+        <audio src="/src/sound/died.mp3" id="DiedSound" onloadeddata="loaded++" loop></audio>
+        <audio src="/src/sound/results.mp3" id="ResultsSound" onloadeddata="loaded++" loop></audio>
+        <audio src="/src/sound/win.mp3" id="WinSound" onloadeddata="loaded++"></audio>
+        <audio src="/src/sound/playerTheGetChosen.mp3" id="playerTheGetChosenSound" onloadeddata="loaded++"></audio>
+        <audio src="/src/sound/showingThePlayerChosen.mp3" id="showingThePlayerChosenSound" onloadeddata="loaded++"></audio>
+</div>
+<script>
+      let loaded = 0
+    let maxloaded = 10
+
+    function showRole(type){
+        if(type == true){//Imposter
+            PlaySoundByText("4")
+            document.getElementById('roleLog').innerHTML = `<div class="imposter roleAnimation"><h1>Mörder</h1><a>Töte unschuldige!</a><div class="players"><h3>Nico</h3></div></div>`
+        } else if(type == false){//Crewmate
+            PlaySoundByText("4")
+            document.getElementById('roleLog').innerHTML = `<div class="crewmate roleAnimation"><h1>Unschuldig</h1><a>Vote den richtigen raus!</a><div class="players"><h3>Nico</h3></div></div>`
+        } else {//                              Error by Getting Role
+            PlaySoundByText("3")
+            document.getElementById('roleLog').innerHTML = `<div class="crewmate roleAnimation"><h1>???</h1><a>???</a><div class="players"><h3>Nico</h3></div></div>`
+        }
+    }
+
+    function showWin(type, me){
+        if(type == true && me == true){//Imposter Won and I
+            PlaySoundByText("2")
+            document.getElementById('roleLog').innerHTML = `<div class="imposter roleAnimation"><h1>Gewonnen</h1><a>Die Murder haben gewonnen!</a><div class="players"><h3>Nico</h3></div></div>`
+        } else if(type == true && me == false){//Imposter Won but i lose(Crewmate)
+            PlaySoundByText("1")
+            document.getElementById('roleLog').innerHTML = `<div class="imposter roleAnimation"><h1>Verloren</h1><a>Die Murder haben gewonnen?</a><div class="players"><h3>Nico</h3></div></div>`
+        } else if(type == false && me == true){//Crewmates Won and i
+            PlaySoundByText("2")
+            document.getElementById('roleLog').innerHTML = `<div class="crewmate roleAnimation"><h1>Gewonnen</h1><a>Die Unshuldigen haben gewonnen!</a><div class="players"><h3>Nico</h3></div></div>`
+        } else if(type == false && me == false){//Crewmates Won but i lose(Imposter)
+            PlaySoundByText("1")
+            document.getElementById('roleLog').innerHTML = `<div class="imposter roleAnimation"><h1>Verloren</h1><a>Die Unshuldigen haben gewonnen?</a><div class="players"><h3>Nico</h3></div></div>`
+        } else {//                              Imposter disconnected
+            PlaySoundByText("3")
+            document.getElementById('roleLog').innerHTML = `<div class="crewmate roleAnimation"><h1>Imposter hat die Verbindung getrennt</h1><a>???</a><div class="players"><h3>Nico</h3></div></div>`
+        }
+    }
+
+
+    function PlaySoundByText(text) {
+        if(loaded >= maxloaded){
+            if(text == "1"){// defeat
+                document.getElementById('DefeatSound').currentTime = 0
+                document.getElementById('DefeatSound').play()
+            } else if(text == "2"){// victory
+                document.getElementById('VictorySound').currentTime = 0
+                document.getElementById('VictorySound').play()
+            } else if(text == "3"){//disconnected
+                document.getElementById('DisconnectedSound').currentTime = 0
+                document.getElementById('DisconnectedSound').play()
+            } else if(text == "4"){// role
+                document.getElementById('RoleSound').currentTime = 0
+                document.getElementById('RoleSound').play()
+            } else if(text == "5"){// NormalSound
+                document.getElementById('NormalSound').currentTime = 0
+                document.getElementById('NormalSound').play()
+            } else if(text == "6"){// DiedSound
+                document.getElementById('DiedSound').currentTime = 0
+                document.getElementById('DiedSound').play()
+            } else if(text == "7"){// ResultsSound
+                document.getElementById('ResultsSound').currentTime = 0
+                document.getElementById('ResultsSound').play()
+            } else if(text == "8"){// WinSound
+                document.getElementById('WinSound').currentTime = 0
+                document.getElementById('WinSound').play()
+            } else if(text == "9"){// WinSound
+                document.getElementById('playerTheGetChosenSound').currentTime = 0
+                document.getElementById('playerTheGetChosenSound').play()
+            } else if(text == "10"){// WinSound
+                document.getElementById('showingThePlayerChosenSound').currentTime = 0
+                document.getElementById('showingThePlayerChosenSound').play()
+            }
+        }
+    }
+
+    function StopSoundByText(text) {
+        if(loaded >= maxloaded){
+            if(text == "1"){// defeat
+                document.getElementById('DefeatSound').currentTime = 0
+                document.getElementById('DefeatSound').pause()
+            } else if(text == "2"){// victory
+                document.getElementById('VictorySound').currentTime = 0
+                document.getElementById('VictorySound').pause()
+            } else if(text == "3"){//disconnected
+                document.getElementById('DisconnectedSound').currentTime = 0
+                document.getElementById('DisconnectedSound').pause()
+            } else if(text == "4"){// role
+                document.getElementById('RoleSound').currentTime = 0
+                document.getElementById('RoleSound').pause()
+            } else if(text == "5"){// NormalSound
+                document.getElementById('NormalSound').currentTime = 0
+                document.getElementById('NormalSound').pause()
+            } else if(text == "6"){// DiedSound
+                document.getElementById('DiedSound').currentTime = 0
+                document.getElementById('DiedSound').pause()
+            } else if(text == "7"){// ResultsSound
+                document.getElementById('ResultsSound').currentTime = 0
+                document.getElementById('ResultsSound').pause()
+            } else if(text == "8"){// WinSound
+                document.getElementById('WinSound').currentTime = 0
+                document.getElementById('WinSound').pause()
+            } else if(text == "9"){// WinSound
+                document.getElementById('playerTheGetChosenSound').currentTime = 0
+                document.getElementById('playerTheGetChosenSound').pause()
+            } else if(text == "10"){// WinSound
+                document.getElementById('showingThePlayerChosenSound').currentTime = 0
+                document.getElementById('showingThePlayerChosenSound').pause()
+            }
+        }
+    }
+</script>
+
+
+
+    <div id="roleLog"></div>

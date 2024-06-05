@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Blax | Klick Simulator</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>let game = io('/gameid1');let socket = io();</script>
+</head>
+<style id="style">
+    body {
+        background-color: #555;
+    }
+
+    *{
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #1f1f1fb3;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #1f1f1fb3 transparent transparent transparent;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .item-list-click{
+        position: relative;
+        width: 98%;
+        left: 1%;
+        margin-top: 2%;
+        right: 1%;
+        box-shadow: 5px 5px 15px 5px #000000;
+    }
+
+    .frame-click{
+        background-color: #dddddd;
+        border-radius: 5px;
+        margin-right: 1%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 5px 5px 15px 5px #000000;
+    }
+
+    button {
+        border-radius: 5px;
+        border: none;
+        background-color: gray;
+        color:white;
+        margin-bottom: 5px;
+        transition: all 0.2;
+    }
+
+    button:disabled{
+        background-color: rgb(0, 0, 0);
+        color:rgb(255, 255, 255);
+    }
+
+    button:active {
+        background-color: rgb(93, 93, 93);
+    }
+
+    .fett{
+        font-weight: bold;
+    }
+
+    hr { 
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+  width: 99%;
+}
+</style>
+<body onload="load()">
+    <div id="black" style="display: block;position: absolute;top: 0px;left: 0px;width: 100%;height: 100%;background-color: black;transition: all 0.5s;z-index: 1000;text-align:center;"><h1>Wating for Data...</h1></div>
+    <div class="item-list-click" id="item-list-click" style="display: inline-flex;">
+        <div class="frame-click">
+            <p>Klick/en/s</p>
+            <p id="clicks">Can't Load, Please Endable JavaScript</p>
+            <hr>
+            <button class="tooltip" onclick="AddClick()"> Klick 
+                <span class="tooltiptext">Fügt klicks hinzu</span>
+            </button>
+            <br>
+            <a><span id="akca">0</span> Klicks pro sekunde</a>
+        </div>
+        <div class="frame-click">
+            <p>Klick größe</p>
+            <p id="big">Can't Load, Please Endable JavaScript</p>
+            <hr>
+            <button class="tooltip" id="kbutton" onclick="AddValue()"> Klick 
+                <span class="tooltiptext" id="needcv">Can't Load</span>
+            </button>
+            <br>
+            <br>
+        </div>
+        <div class="frame-click">
+            <p>Auto Klicker</p>
+            <p id="akc">Can't Load, Please Endable JavaScript</p>
+            <hr>
+            <button class="tooltip" id="akbutton" onclick="AddAK()"> Klick 
+                <span class="tooltiptext" id="needak"></span>
+            </button>
+            <br>
+            <br>
+        </div>
+    </div>
+    <div class="item-list-click" style="background-color: #dddddd;border-radius: 5px;height: 5%;">
+        <h2>Leaderboard:</h2>
+        <div id="leadboard">
+            <a><span class="fett">W</span><span id="AName" class="fett">A</span>T<span id="AScore" class="fett">I</span>NG</a>
+        </div>
+    </div>
+</body>
+<script>
+    //Socket.io
+    var list = []
+    var get = 0
+    let login = null;
+    let pass = null;
+    let color = null;
+    let mydata = null;
+    let oneTimeSetDisplay = false
+
+    //AddClick
+    let click = 0
+
+    //AddValue
+    let clickvalue = 1
+    let needadded = 0
+    let needclicks = 0
+    
+    //Autoklicker
+    let Autoklicker = 0
+    let autoadded = 0
+    let needclicksak = 0
+
+    //Formater
+    const formatCash = n => {
+        if (n < 1e3) return n;
+        if (n >= 1e3 && n <= 1e6) return +(n / 1e3).toFixed(1) + " Tausend";
+        if (n >= 1e6 && n <= 1e9) return +(n / 1e6).toFixed(1) + " Millionen";
+        if (n >= 1e9 && n <= 1e12) return +(n / 1e9).toFixed(1) + " Billion";
+        if (n >= 1e12 && n <= 1e15) return +(n / 1e12).toFixed(1) + " Billiarde";
+        if (n >= 1e15 && n <= 1e18) return +(n / 1e15).toFixed(1) + " Trillion";
+        if (n >= 1e18 && n <= 1e21) return +(n / 1e18).toFixed(1) + " Trilliarde";
+        if (n >= 1e21 && n <= 1e24) return +(n / 1e21).toFixed(1) + " Quadrillion";
+        if (n >= 1e24 && n <= 1e27) return +(n / 1e24).toFixed(1) + " Quadrilliarde";
+        if (n >= 1e27 && n <= 1e30) return +(n / 1e27).toFixed(1) + " Quintillion";
+        if (n >= 1e30 && n <= 1e33) return +(n / 1e30).toFixed(1) + " Quintilliarde";
+        if (n >= 1e33 && n <= 1e36) return +(n / 1e33).toFixed(1) + " Sextillion";
+        if (n >= 1e36 && n <= 1e39) return +(n / 1e36).toFixed(1) + " Sextilliarde";
+        if (n >= 1e39 && n <= 1e42) return +(n / 1e39).toFixed(1) + " Septillion";
+        if (n >= 1e42 && n <= 1e45) return +(n / 1e42).toFixed(1) + " Septilliarde";
+        if (n >= 1e45 && n <= 1e48) return +(n / 1e45).toFixed(1) + " Oktillion";
+        if (n >= 1e48 && n <= 1e51) return +(n / 1e48).toFixed(1) + " Oktilliarde";
+        if (n >= 1e51 && n <= 1e54) return +(n / 1e51).toFixed(1) + " Nonillion";
+        if (n >= 1e54 && n <= 1e57) return +(n / 1e54).toFixed(1) + " Nonilliarde";
+        if (n >= 1e57 && n <= 1e60) return +(n / 1e57).toFixed(1) + " Dezillion";
+        if (n >= 1e60) return +(n / 1e60).toFixed(1) + " Dezilliarde";
+    };
+
+    function load() {
+      login = JSON.parse(localStorage.getItem('login')).name
+      pass = JSON.parse(localStorage.getItem('login')).pass
+      setTimeout(function(){
+        socket.emit("TryLogin", localStorage.getItem('login'), true);    
+        socket.emit('GetData', login, pass, "GameId|1")
+        for(let i=0; i<document.getElementById('item-list-click').querySelectorAll("div").length;i++){document.getElementById('item-list-click').querySelectorAll("div")[i].style.width = "calc(100%/"+document.getElementById('item-list-click').querySelectorAll("div").length+")"}
+        setInterval(update,50)
+        setInterval(autoclicker,1000)
+        setInterval(save,3000)
+      },1000)
+    }
+  
+    socket.on("SendTryLogin", (feedback, userdata) => {
+      if (feedback == true) {
+          mydata = JSON.parse(userdata);
+          login = JSON.parse(userdata).name;
+          call = JSON.parse(userdata).call;
+          pass = JSON.parse(userdata).pass;    
+      } else {
+        window.location.href = "/login.html?tryed"
+      }
+    });
+
+    socket.on('SendData', (data) =>{
+      if(data == undefined){
+        undef()
+      } else if(data == "Unknow account"){
+        console.error('Account not found')
+        document.getElementById('black').innerHTML = "<h2 style='color:white'>Sorry you're account is corrupted and can't be found please try agian or contact the Nicoot Support<br><br>- System</h2>"
+      } else {
+        get = 1
+        document.getElementById('black').style.display = "none"
+        let dat = data
+        click = dat.click
+        clickvalue = dat.clickvalue
+        Autoklicker = dat.Autoklicker
+        needadded = dat.needadded
+        autoadded = dat.autoadded
+        needValue()
+        needAKValue()
+      }      
+    })
+
+    function undef() {
+        console.log('Createt new Scores')
+        get = 1
+        document.getElementById('black').style.display = "none"
+        click = 0
+        clickvalue = 1
+        Autoklicker = 0
+        needadded = 0
+        autoadded = 0
+        needValue()
+        needAKValue()
+    }
+
+    function update() {
+        document.getElementById('clicks').textContent = formatCash(click)
+        document.getElementById('big').textContent = formatCash(clickvalue)
+        document.getElementById('akc').textContent = formatCash(Autoklicker)
+        if(needclicksak!= "MAX"){document.getElementById('needak').textContent = formatCash(needclicksak)+" Klicks, Stufe: "+autoadded}else{document.getElementById('needak').textContent = "Maximal";document.getElementById('akbutton').disabled = true;document.getElementById('akbutton').innerHTML ="MAX<span class='tooltiptext' id='needak'>Maximal</span>"}
+        if(needclicks!= "MAX"){document.getElementById('needcv').textContent = formatCash(needclicks)+" Klicks, Stufe: "+needadded}else{document.getElementById('needcv').textContent = "Maximal";document.getElementById('kbutton').disabled = true;document.getElementById('kbutton').innerHTML ="MAX<span class='tooltiptext' id='needcv'>Maximal</span>"}
+        document.getElementById('akca').textContent = formatCash(Autoklicker*clickvalue)
+        if(click>=needclicksak){document.getElementById('needak').style.color = "lime"} else {document.getElementById('needak').style.color = "red"}
+        if(click>=needclicks){document.getElementById('needcv').style.color = "lime"} else {document.getElementById('needcv').style.color = "red"}
+    }
+
+    function autoclicker() {
+        for(let i = 0; i<Autoklicker;i++){
+            click+=clickvalue
+        }
+    }
+
+    function save() {
+        if(get==1){
+            let json = {"click":click, "clickvalue":clickvalue, "Autoklicker":Autoklicker, "needadded":needadded, "autoadded":autoadded}
+            game.emit('lboard',login,click,mydata.color)
+            socket.emit('SaveData', login, pass, "GameId|1", JSON.stringify(json))
+        }
+    }
+  
+    function CountdownDisplay(){
+      countdown--
+    }
+
+    game.on('lboard', data =>{
+        countdown = 3
+        if(oneTimeSetDisplay){SetInterval(function(){CountdownDisplay();;oneTimeSetDisplay = true},3000)}
+        list = data
+        document.getElementById('leadboard').innerHTML = ""
+        for(let i = 0; i < list.length; i++){
+            let num = i+1
+            document.getElementById('leadboard').innerHTML = document.getElementById('leadboard').innerHTML+"<p><span class='fett'>"+num+".</span> <span id='AName' class='fett' style='color:"+list[i].color+";'>"+list[i].name+"</span> mit <span id='AScore' class='fett'>"+formatCash(list[i].score)+"</span> Klicks !</p>"            
+        }
+    })
+
+    function AddClick() {
+        click+=clickvalue
+    }
+
+    function AddValue(){
+        if(needclicks!="MAX"&&click>=needclicks){
+            clickvalue=clickvalue*2
+            click=click-needclicks
+            needadded++
+            needValue()
+        }
+    }
+    
+    function needValue() {
+        if(needadded == 0){needclicks=50}else
+        if(needadded == 1){needclicks=100}else
+        if(needadded == 2){needclicks=500}else
+        if(needadded == 3){needclicks=1000}else
+        if(needadded == 4){needclicks=2000}else
+        if(needadded == 5){needclicks=3000}else
+        if(needadded == 6){needclicks=40000}else
+        if(needadded == 7){needclicks=50000}else
+        if(needadded == 8){needclicks=60000}else
+        if(needadded == 9){needclicks=70000}else
+        if(needadded == 10){needclicks=8000}else
+        if(needadded == 11){needclicks=9000}else
+        if(needadded == 12){needclicks=10000}else
+        if(needadded == 13){needclicks=20000}else
+        if(needadded == 14){needclicks=30000}else
+        if(needadded == 15){needclicks=40000}else
+        if(needadded == 16){needclicks=50000}else
+        if(needadded == 17){needclicks=60000}else
+        if(needadded == 18){needclicks=70000}else
+        if(needadded == 19){needclicks=80000}else
+        if(needadded == 20){needclicks=1000001}else
+        if(needadded == 21){needclicks=10000001}else
+        if(needadded == 22){needclicks=100000001}else
+        if(needadded == 23){needclicks=1000000001}else
+        if(needadded == 24){needclicks=10000000001}else
+        if(needadded == 25){needclicks=50000000000}else
+        if(needadded == 26){needclicks=100000000001}else
+        if(needadded == 27){needclicks=500000000000}else
+        if(needadded == 28){needclicks=1000000000001}else
+        if(needadded == 29){needclicks=10000000000001}else
+        if(needadded == 30){needclicks=50000000000000}else
+        if(needadded == 31){needclicks=100000000000001}else
+        if(needadded == 32){needclicks=500000000000000}else
+        if(needadded == 33){needclicks=1000000000000001}else
+        if(needadded == 34){needclicks=5000000000000000}else
+        if(needadded == 35){needclicks=10000000000000001}else
+        if(needadded == 36){needclicks=50000000000000000}else
+        if(needadded == 37){needclicks=100000000000000001}else
+        if(needadded == 38){needclicks=500000000000000000}else
+        if(needadded == 39){needclicks=5000000000000000000}else
+        if(needadded == 40){needclicks=50000000000000000000}else
+        if(needadded == 41){needclicks=500000000000000000000}else
+        if(needadded == 42){needclicks=5000000000000000000000}else
+        if(needadded == 43){needclicks=50000000000000000000000}else
+        if(needadded == 44){needclicks=500000000000000000000000}else
+        if(needadded == 45){needclicks=5000000000000000000000000}else
+        if(needadded == 46){needclicks=5000000000000000000000000}else
+        if(needadded == 47){needclicks=50000000000000000000000000}else
+        if(needadded == 48){needclicks=50000000000000000000000000}else
+        if(needadded == 49){needclicks=500000000000000000000000000}else                             
+        if(needadded == 50){needclicks="MAX"}
+    }
+
+    function AddAK() {
+        if(needclicksak!="MAX"&&click>=needclicksak){
+            Autoklicker++
+            click=click-needclicksak
+            autoadded++
+            needAKValue()
+        }
+    }
+
+    function needAKValue() {
+        if(autoadded == 0){needclicksak=1000}
+        if(autoadded == 1){needclicksak=2000}
+        if(autoadded == 2){needclicksak=4000}
+        if(autoadded == 3){needclicksak=10000}
+        if(autoadded == 4){needclicksak=20000}
+        if(autoadded == 5){needclicksak=50000}
+        if(autoadded == 6){needclicksak=100000}
+        if(autoadded == 7){needclicksak=500000}
+        if(autoadded == 8){needclicksak=800000}
+        if(autoadded == 9){needclicksak=999999}
+        if(autoadded == 10){needclicksak=100000001}
+        if(autoadded == 11){needclicksak=500000000}
+        if(autoadded == 12){needclicksak=1000000001}
+        if(autoadded == 13){needclicksak=5000000000}
+        if(autoadded == 14){needclicksak=10000000001}
+        if(autoadded == 15){needclicksak=50000000000}
+        if(autoadded == 16){needclicksak=100000000001}
+        if(autoadded == 17){needclicksak=500000000000}
+        if(autoadded == 18){needclicksak=1000000000001}
+        if(autoadded == 19){needclicksak=5000000000000}
+        if(autoadded == 20){needclicksak=10000000000001}
+        if(autoadded == 21){needclicksak=50000000000000}
+        if(autoadded == 22){needclicksak=100000000000001}
+        if(autoadded == 23){needclicksak=500000000000000}
+        if(autoadded == 24){needclicksak=1000000000000001}
+        if(autoadded == 25){needclicksak=5000000000000000}
+        if(autoadded == 26){needclicksak=10000000000000001}
+        if(autoadded == 27){needclicksak=50000000000000000}
+        if(autoadded == 28){needclicksak=100000000000000001}
+        if(autoadded == 29){needclicksak=500000000000000000}
+        if(autoadded == 30){needclicksak=1000000000000000001}
+        if(autoadded == 31){needclicksak=5000000000000000000}
+        if(autoadded == 32){needclicksak=10000000000000000001}
+        if(autoadded == 33){needclicksak=50000000000000000000}
+        if(autoadded == 34){needclicksak=100000000000000000001}
+        if(autoadded == 35){needclicksak=500000000000000000000}
+        if(autoadded == 36){needclicksak=1000000000000000000001}
+        if(autoadded == 37){needclicksak=5000000000000000000000}
+        if(autoadded == 38){needclicksak=10000000000000000000001}
+        if(autoadded == 39){needclicksak=50000000000000000000000}
+        if(autoadded == 40){needclicksak=100000000000000000000001}
+        if(autoadded == 41){needclicksak=500000000000000000000000}
+        if(autoadded == 42){needclicksak=1000000000000000000000001}
+        if(autoadded == 43){needclicksak=5000000000000000000000000}
+        if(autoadded == 44){needclicksak=10000000000000000000000001}
+        if(autoadded == 45){needclicksak=50000000000000000000000000}
+        if(autoadded == 46){needclicksak=100000000000000000000000001}
+        if(autoadded == 47){needclicksak=500000000000000000000000000}
+        if(autoadded == 48){needclicksak=1000000000000000000000000001}
+        if(autoadded == 49){needclicksak=5000000000000000000000000000}
+        if(autoadded == 50){needclicksak="MAX"}
+    }
+</script>
+</html>
